@@ -1,0 +1,25 @@
+.header {
+    @apply flex justify-between items-center py-2 px-6;
+    background-color: #063475;
+    color: #fff;
+    span {
+        transform: rotate(90deg);
+        margin-top: 0.25rem;
+        margin-right: 0.5rem;
+    }
+
+    h3 {
+        font-size: 1.4rem;
+    }
+
+    img {
+        border-radius: 50%;
+        object-fit: cover;
+        height: 3.25rem;
+        width: 3.25rem;
+    }
+
+    @media #{$break1} , #{$break2} {
+        background-color: #FF0000;
+    }
+}

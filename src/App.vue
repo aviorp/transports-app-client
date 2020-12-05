@@ -1,32 +1,75 @@
 <template>
-  <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
-    <router-view/>
+  <div>
+    <app-header></app-header>
+    <!-- <div style="max-height: 300px !important">
+      <line-chart :chartData="datasets"></line-chart>
+      <pie-chart :chartData="datasets"></pie-chart>
+    </div> -->
+    <input name="myTest" type="file" @change="uploadFile($event)" />
+    <button
+      @click="fetchVehicles"
+      class="mx-auto mt-12 py-2 px-6 bg-blue-700 text-white rounded text-center"
+    >
+      fetch vehicles
+    </button>
   </div>
 </template>
 
-<style lang="scss">
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
+<script lang='ts'>
+import { Component, Vue } from "vue-property-decorator";
+import appHeader from "@/components/Header/Header.vue";
+import axios from "axios";
+// import lineChart from "@/charts/lineChart";
+// import piechart from "@/charts/PieChart";
+import { socket } from "./api";
+@Component({
+  components: {
+    appHeader,
+    // lineChart,
+    // piechart,
+  },
+})
+export default class App extends Vue {
+  // @ts-ignore;
 
-#nav {
-  padding: 30px;
+  message: string = "App Component !";
+  datasets: any[] = [
+    {
+      data: [10, 20, 30],
+    },
+  ];
 
-  a {
-    font-weight: bold;
-    color: #2c3e50;
+  created() {
+    // @ts-ignore;
+    socket.on("client-test", (msg: string) => {
+      console.log(msg);
+    });
+    socket.emit("connection", socket.id);
+    socket.on("hello-all", (msg: string) => {
+      alert(msg);
+    });
+  }
 
-    &.router-link-exact-active {
-      color: #42b983;
-    }
+  fetchVehicles() {
+    socket.emit("sign-user", {
+      isAdmin: false,
+      id: socket.id,
+    });
+     axios
+      .get("http://localhost:3000/download")
+      .then((data) => console.log(data));
+    fetch("http://localhost:3000/vehicles/getVehicles")
+      .then((res) => res.json())
+      .then((data) => console.log(data));
+  }
+  uploadFile(e: Event) {
+    const fd = new FormData();
+    // @ts-ignore
+    const file = e.target.files[0];
+    fd.append(file.name, file, file.name);
+    axios
+      .post("http://localhost:3000/upload", fd)
+      .then((data) => console.log(data));
   }
 }
-</style>
+</script>

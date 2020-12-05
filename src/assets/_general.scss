@@ -1,0 +1,30 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    direction: rtl;
+    font-family: 'Varela Round', sans-serif;
+}
+
+html,
+body {
+    height: 100%;
+}
+
+.space-left>* {
+    margin-left: 10px;
+}
+
+.space-bottom>* {
+    margin-bottom: 10px;
+}
+
+.same-size>* {
+    flex: 1 1 0px;
+    overflow: auto;
+}
+
+.scrollable>* {
+    flex: 1 1 auto;
+    overflow-y: auto;
+}
